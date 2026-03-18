@@ -1,6 +1,5 @@
 package com.platform.main.product.entity;
 
-import com.platform.main.order.entity.Category;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;

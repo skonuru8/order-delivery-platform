@@ -2,8 +2,10 @@ server:
   port: 8080
 
 spring:
+
   application:
     name: main-app
+
 
   datasource:
     url: jdbc:postgresql://localhost:5432/platform_db?currentSchema=main
@@ -31,6 +33,13 @@ spring:
     port: 5672
     username: ${RABBITMQ_USER}
     password: ${RABBITMQ_PASSWORD}
+
+  graphql:
+    schema:
+      locations: classpath:graphql/**/
+      file-extensions: .graphqls,.gqls
+    graphiql:
+      enabled: true
 
 app:
   jwt:

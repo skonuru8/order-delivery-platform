@@ -1,9 +1,5 @@
 package com.platform.main.auth.resolver;
 
-import com.netflix.graphql.dgs.DgsComponent;
-import com.netflix.graphql.dgs.DgsMutation;
-import com.netflix.graphql.dgs.DgsQuery;
-import com.netflix.graphql.dgs.InputArgument;
 import com.platform.main.auth.dto.AuthPayload;
 import com.platform.main.auth.dto.LoginInput;
 import com.platform.main.auth.dto.RegisterInput;
@@ -11,29 +7,33 @@ import com.platform.main.auth.entity.User;
 import com.platform.main.auth.repository.UserRepository;
 import com.platform.main.auth.service.AuthService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.graphql.data.method.annotation.Argument;
+import org.springframework.graphql.data.method.annotation.MutationMapping;
+import org.springframework.graphql.data.method.annotation.QueryMapping;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.stereotype.Controller;
 
 import java.util.UUID;
 
-@DgsComponent
+@Controller
 @RequiredArgsConstructor
 public class AuthResolver {
 
     private final AuthService authService;
     private final UserRepository userRepository;
 
-    @DgsMutation
-    public AuthPayload register(@InputArgument RegisterInput input) {
+    @MutationMapping
+    public AuthPayload register(@Argument RegisterInput input) {
         return authService.register(input);
     }
 
-    @DgsMutation
-    public AuthPayload login(@InputArgument LoginInput input) {
+    @MutationMapping
+    public AuthPayload login(@Argument LoginInput input) {
         return authService.login(input);
     }
 
-    @DgsQuery
+    @QueryMapping
     @PreAuthorize("isAuthenticated()")
     public User me() {
         // JwtAuthenticationFilter already validated the token
