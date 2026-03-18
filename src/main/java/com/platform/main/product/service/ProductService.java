@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.UUID;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -75,8 +76,8 @@ public class ProductService {
     public Map<Product, Category> getCategoriesForProducts(List<Product> products) {
         // Collect all unique category IDs from all products
         List<UUID> categoryIds = products.stream()
-                .filter(p -> p.getCategory() != null)
-                .map(p -> p.getCategory().getId())
+                .map(Product::getCategoryId)
+                .filter(Objects::nonNull)
                 .distinct()
                 .collect(Collectors.toList());
 

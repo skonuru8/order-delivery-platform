@@ -45,6 +45,10 @@ public class Product {
 
     private String imageUrl;
 
+    // Plain UUID — safe to read without triggering lazy loading
+    @Column(name = "category_id", insertable = false, updatable = false)
+    private UUID categoryId;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "category_id")
     private Category category;
