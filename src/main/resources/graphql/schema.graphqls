@@ -1,0 +1,124 @@
+scalar DateTime
+
+# ── Queries ──
+type Query {
+    me: User!
+    products(category: String, search: String, page: Int, size: Int): ProductPage!
+    product(id: ID!): Product
+    orders(status: OrderStatus, page: Int, size: Int): OrderPage!
+    order(id: ID!): Order
+    dashboardStats: DashboardStats!
+}
+
+# ── Mutations ──
+type Mutation {
+    register(input: RegisterInput!): AuthPayload!
+    login(input: LoginInput!): AuthPayload!
+    placeOrder(input: PlaceOrderInput!): Order!
+    cancelOrder(id: ID!): Order!
+    shipOrder(id: ID!): Order!
+    updateStock(productId: ID!, adjustment: Int!): Product!
+}
+
+# ── Auth Types ──
+input LoginInput {
+    email: String!
+    password: String!
+}
+
+input RegisterInput {
+    name: String!
+    email: String!
+    password: String!
+}
+
+type AuthPayload {
+    token: String!
+    refreshToken: String!
+    user: User!
+}
+
+type User {
+    id: ID!
+    email: String!
+    name: String!
+    role: String!
+    address: String
+}
+
+# ── Product Types ──
+type Product {
+    id: ID!
+    name: String!
+    sku: String!
+    description: String
+    price: Float!
+    stockQuantity: Int!
+    imageUrl: String
+    category: Category
+}
+
+type Category {
+    id: ID!
+    name: String!
+    description: String
+}
+
+type ProductPage {
+    content: [Product!]!
+    totalElements: Int!
+    totalPages: Int!
+    currentPage: Int!
+}
+
+# ── Order Types ──
+input PlaceOrderInput {
+    items: [OrderItemInput!]!
+    shippingAddress: String!
+}
+
+input OrderItemInput {
+    productId: ID!
+    quantity: Int!
+}
+
+type Order {
+    id: ID!
+    status: OrderStatus!
+    totalAmount: Float!
+    shippingAddress: String!
+    items: [OrderLineItem!]!
+    customer: User!
+    createdAt: DateTime!
+    updatedAt: DateTime!
+}
+
+type OrderLineItem {
+    id: ID!
+    product: Product!
+    quantity: Int!
+    unitPrice: Float!
+}
+
+type OrderPage {
+    content: [Order!]!
+    totalElements: Int!
+    totalPages: Int!
+    currentPage: Int!
+}
+
+enum OrderStatus {
+    PENDING
+    CONFIRMED
+    SHIPPED
+    DELIVERED
+    CANCELLED
+}
+
+# ── Dashboard ──
+type DashboardStats {
+    ordersToday: Int!
+    revenueToday: Float!
+    activeDeliveries: Int!
+    lowStockProducts: Int!
+}
