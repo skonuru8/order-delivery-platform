@@ -112,7 +112,7 @@ enum OrderStatus {
     CONFIRMED
     SHIPPED
     DELIVERED
-    CANCELLED
+    CANCELED
 }
 
 # ── Dashboard ──
